@@ -3,7 +3,13 @@ import ShareForm from "@/components/ShareForm.vue";
 import GenerateCode from "@/components/GenerateCode.vue";
 import { ref } from "vue";
 
+const code = ref<string>("");
 const isChoosenCode = ref<boolean>(false);
+
+const chooseCode = (newCode: string) => {
+  isChoosenCode.value = true;
+  code.value = newCode;
+};
 </script>
 
 <template>
@@ -12,9 +18,9 @@ const isChoosenCode = ref<boolean>(false);
       <div class="share__inner">
         <GenerateCode
           v-if="!isChoosenCode"
-          @choose-code="isChoosenCode = true"
+          @choose-code="(newCode: string) => chooseCode(newCode)"
         />
-        <ShareForm v-else />
+        <ShareForm :code="code" v-else />
       </div>
     </div>
   </section>

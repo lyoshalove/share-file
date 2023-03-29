@@ -32,6 +32,7 @@ const { notifications } = storeToRefs(notificationsStore());
     border-radius: 8px
     border: 2px solid $secondary
     margin: 5px 0
+    text-align: right
   &-move,
   &-enter-active,
   &-leave-active

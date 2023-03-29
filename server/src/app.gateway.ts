@@ -13,6 +13,11 @@ import { Server, Socket } from 'socket.io';
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
+  rooms: Array<{ senderId: string; roomId: string }>;
+
+  constructor() {
+    this.rooms = [];
+  }
 
   @SubscribeMessage('check')
   handleEvent(@MessageBody() data: string) {
@@ -22,28 +27,50 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('sender-join')
   handleSenderJoin(@MessageBody() data, @ConnectedSocket() client: Socket) {
+    console.log('sender-join');
+    this.rooms.push({
+      senderId: client.id,
+      roomId: data.uid,
+    });
     client.join(data.uid);
+  }
+
+  @SubscribeMessage('client-leave')
+  handleDisconnectClient(@ConnectedSocket() client: Socket) {
+    console.log('client-leave: ', client.id);
+    client.rooms.forEach((room) => {
+      client.leave(room);
+    });
+    console.log(client.rooms);
+    this.rooms = this.rooms.filter((room) => room.senderId !== client.id);
   }
 
   @SubscribeMessage('receiver-join')
   handleReceiverJoin(@MessageBody() data, @ConnectedSocket() client: Socket) {
-    client.join(data.uid);
-    client.in(data.sender_uid).emit('init', data.uid);
+    if (this.rooms.some((room) => room.roomId === data.uid)) {
+      console.log('receiver-join');
+      client.join(data.uid);
+      client.in(data.sender_uid).emit('init', data.uid);
+      this.connectedToRoom(client);
+    } else {
+      this.roomNotExist(client);
+    }
   }
 
-  @SubscribeMessage('file-meta')
-  handleFileMeta(@MessageBody() data, @ConnectedSocket() client: Socket) {
-    client.in(data.uid).emit('fs-meta', data.metadata);
+  @SubscribeMessage('send-file')
+  handleSendFile(@MessageBody() data, @ConnectedSocket() client: Socket) {
+    client.in(data.uid).emit('file', {
+      data: data.data,
+      fileName: data.fileName,
+    });
   }
 
-  @SubscribeMessage('fs-start')
-  handleFsStart(@MessageBody() data, @ConnectedSocket() client: Socket) {
-    client.in(data.uid).emit('fs-share', {});
+  connectedToRoom(client: Socket) {
+    client.emit('connected-to-room');
   }
 
-  @SubscribeMessage('file-raw')
-  handleFileRaw(@MessageBody() data, @ConnectedSocket() client: Socket) {
-    client.in(data.uid).emit('fs-share', data.buffer);
+  roomNotExist(client: Socket) {
+    client.emit('room-not-exist');
   }
 
   handleConnection(client: Socket) {

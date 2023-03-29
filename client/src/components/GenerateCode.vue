@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { generateCode } from "@/helpers";
+import { generateCode, socket } from "@/helpers";
 import { notificationsStore } from "@/store";
 import question from "@assets/images/question.svg";
 import { ref, computed } from "vue";
@@ -21,7 +21,10 @@ const copyCode = () => {
 };
 const chooseCode = () => {
   if (!checkCodeToNullable.value) {
-    emits("chooseCode");
+    emits("chooseCode", code.value);
+    socket.emit("sender-join", {
+      uid: code.value,
+    });
   }
 };
 </script>
@@ -48,7 +51,11 @@ const chooseCode = () => {
       </a>
     </div>
     <div class="generation__footer-right">
-      <button class="btn generation__footer-btn" @click="chooseCode" :disabled="checkCodeToNullable">
+      <button
+        class="btn generation__footer-btn"
+        @click="chooseCode"
+        :disabled="checkCodeToNullable"
+      >
         Create room
       </button>
     </div>
@@ -65,6 +72,9 @@ const chooseCode = () => {
     background-color: $four
     border-radius: 10px
     border: 2px solid $secondary
+  &__content
+    &-code
+      cursor: pointer
   &__header,
   &__content,
   &__footer
