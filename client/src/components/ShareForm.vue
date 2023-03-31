@@ -39,7 +39,7 @@ const handleInputFile = (event: any) => {
   let rawData = new ArrayBuffer(8);
 
   fileReader.onload = (event) => {
-    rawData = event.target?.result;
+    rawData = event.target?.result as ArrayBuffer;
     socket.emit("send-file", {
       uid: props.code,
       data: rawData,
@@ -59,11 +59,11 @@ const removeFile = (fileId: string) => {
 socket.on("file", (file: IFile) => {
   console.log(file);
   files.value.unshift({ ...file, id: generateCode() });
-  // downloadBlob(new Uint8Array(data.data), data.fileName);
 });
 
 onBeforeUnmount(() => {
   socket.emit("client-leave");
+  socket.removeAllListeners();
   console.log("bebra: ", props.code);
 });
 </script>

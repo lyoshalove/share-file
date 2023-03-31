@@ -10,13 +10,11 @@ interface IProps {
   removeFile: () => void;
 }
 
-const extensions = Object.keys(fileExtensions);
-
 const props = defineProps<IProps>();
 const imageUrl = computed(() => {
   const fileExtension = props.fileName.split(".")[1];
 
-  if (extensions.includes(fileExtension)) {
+  if (fileExtensions.includes(fileExtension)) {
     return `src/assets/images/extensions/${props.fileName.split(".")[1]}.svg`;
   }
 

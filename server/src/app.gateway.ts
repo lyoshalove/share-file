@@ -38,10 +38,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('client-leave')
   handleDisconnectClient(@ConnectedSocket() client: Socket) {
     console.log('client-leave: ', client.id);
-    client.rooms.forEach((room) => {
-      client.leave(room);
-    });
-    console.log(client.rooms);
     this.rooms = this.rooms.filter((room) => room.senderId !== client.id);
   }
 
@@ -50,7 +46,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (this.rooms.some((room) => room.roomId === data.uid)) {
       console.log('receiver-join');
       client.join(data.uid);
-      client.in(data.sender_uid).emit('init', data.uid);
       this.connectedToRoom(client);
     } else {
       this.roomNotExist(client);

@@ -66,7 +66,7 @@ const chooseCode = () => {
 @import @assets/styles/vars
 
 .generation
-  margin: 20px 0 0
+  margin: 20px 0
   &__inner
     padding: 30px 0 0
     background-color: $four
