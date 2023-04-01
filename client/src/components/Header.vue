@@ -10,12 +10,12 @@ import logo from "@assets/images/logo.svg";
           <img :src="logo" alt="logo" class="header__logo" />
         </RouterLink>
         <div class="header__actions">
-          <RouterLink to="/connection" class="btn btn-secondary header__btn"
-            >Receiver</RouterLink
-          >
-          <RouterLink to="/share-files" class="btn header__btn"
-            >Sender</RouterLink
-          >
+          <RouterLink to="/connection" class="btn btn-secondary header__btn">
+            Connect
+          </RouterLink>
+          <RouterLink to="/share-files" class="btn header__btn">
+            Create
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -34,4 +34,11 @@ import logo from "@assets/images/logo.svg";
     display: flex
     align-items: center
     gap: 0 20px
+
+@media (max-width: 480px)
+  .header
+    &__inner
+      gap: 0 15px
+    &__actions
+      display: none
 </style>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { generateCode, socket } from "@/helpers";
+import { notificationsMessages } from "@/constants";
+import { socket } from "@/helpers";
 import { notificationsStore } from "@/store";
 import question from "@assets/images/question.svg";
 import { ref } from "vue";
@@ -10,23 +11,16 @@ const notifications = notificationsStore();
 
 const connectToRoom = () => {
   socket.emit("receiver-join", {
-    uid: code.value,
+    id: code.value,
   });
 };
 
 socket.on("room-not-exist", () => {
-  notifications.addNewNotification({
-    id: generateCode(),
-    text: "Room with this id not exist ❌",
-  });
+  notifications.addNewNotification(notificationsMessages.roomNotExist);
 });
 
 socket.on("connected-to-room", () => {
-  console.log("click: ", socket.id);
-  notifications.addNewNotification({
-    id: generateCode(),
-    text: "Connected to room ✅",
-  });
+  notifications.addNewNotification(notificationsMessages.connectedToRoom);
   emits("connected", code.value);
 });
 </script>
@@ -71,8 +65,7 @@ socket.on("connected-to-room", () => {
 
 .connection
   &__header,
-  &__content,
-  &__footer
+  &__content
     padding: 0 20px
   &__content
     margin: 25px 0 35px
@@ -89,4 +82,20 @@ socket.on("connected-to-room", () => {
       align-items: center
       gap: 0 10px
       color: $five
+
+@media (max-width: 480px)
+  .connection
+    &__header,
+    &__content
+      padding: 0 15px
+    &__content
+      margin: 15px 0 20px
+    &__footer
+      padding: 10px 10px 20px
+      gap: 0 15px
+      &-link
+        gap: 0 5px
+        font-size: 14px
+    &__input
+      width: 100%
 </style>

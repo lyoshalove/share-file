@@ -41,4 +41,9 @@ const { notifications } = storeToRefs(notificationsStore());
   &-leave-to
     opacity: 0
     transform: translate(25px, 0)
+
+@media (max-width: 480px)
+  .notifications
+    &__item
+      font-size: 14px
 </style>

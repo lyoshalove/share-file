@@ -3,9 +3,7 @@ const downloadFile = (data: string, fileName: string) => {
 
   link.href = data;
   link.download = fileName;
-
   document.body.appendChild(link);
-
   link.style.display = "none";
 
   link.click();

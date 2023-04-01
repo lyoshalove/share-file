@@ -36,6 +36,15 @@ body
   color: $primary
   background-color: $third
 
+h1
+  font-size: 36px
+  
+h2
+  font-size: 28px
+
+h3
+  font-size: 26px
+
 button, input, textarea
   font-family: inherit
   font-size: inherit
@@ -80,8 +89,12 @@ input
     color: $five
 
 .input__file
-  display: none
+  position: absolute
+  inset: 0
+  opacity: 0
+  cursor: pointer
   &-label
+    position: relative
     min-height: 250px
     border-radius: 10px
     border: 2px dashed $secondary
@@ -89,17 +102,26 @@ input
     justify-content: center
     align-items: center
     flex-direction: column
-    position: relative
-    cursor: pointer
+    text-align: center
+    user-select: none
+    transition: background-color .3s
+    &.enter
+      background-color: rgba($secondary, .2)
   &-image
     width: 55px
     margin: 0 0 10px
   &-span
-    position: relative
-    &::before
-      content: ''
-      position: absolute
-      inset: auto auto 0 0
-      height: 2px
-      width: 100%
-      background-color: $primary
+    border-bottom: 2px solid $primary
+
+@media (max-width: 480px)
+  h1
+    font-size: 30px
+
+  h2
+    font-size: 24px
+
+  h3
+    font-size: 22px
+
+  .btn
+    font-size: 14px

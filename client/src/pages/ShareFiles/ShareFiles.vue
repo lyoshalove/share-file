@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ShareForm from "@/components/ShareForm.vue";
 import GenerateCode from "@/components/GenerateCode.vue";
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
+import { socket } from "@/helpers";
 
 const code = ref<string>("");
 const isChoosenCode = ref<boolean>(false);
@@ -10,6 +11,10 @@ const chooseCode = (newCode: string) => {
   isChoosenCode.value = true;
   code.value = newCode;
 };
+
+onUnmounted(() => {
+  socket.removeAllListeners();
+});
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const chooseCode = (newCode: string) => {
           v-if="!isChoosenCode"
           @choose-code="(newCode: string) => chooseCode(newCode)"
         />
-        <ShareForm :code="code" v-else />
+        <ShareForm v-else :roomCode="code" />
       </div>
     </div>
   </section>
@@ -30,10 +35,15 @@ const chooseCode = (newCode: string) => {
 @import @assets/styles/vars
 
 .share
-  margin: 20px 0
+  padding: 20px 0
   &__inner
     padding: 30px 0 0
     background-color: $four
     border-radius: 10px
     border: 2px solid $secondary
+
+@media (max-width: 480px)
+  .share
+    &__inner
+      padding: 15px 0 0
 </style>

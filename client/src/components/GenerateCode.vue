@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { notificationsMessages } from "@/constants";
 import { generateCode, socket } from "@/helpers";
 import { notificationsStore } from "@/store";
 import question from "@assets/images/question.svg";
@@ -13,17 +14,14 @@ const createCode = () => (code.value = generateCode());
 const copyCode = () => {
   if (!checkCodeToNullable.value) {
     navigator.clipboard.writeText(code.value);
-    addNewNotification({
-      id: generateCode(),
-      text: "Code copied to clipboard 😋",
-    });
+    addNewNotification(notificationsMessages.codeCopiedToClipboard);
   }
 };
 const chooseCode = () => {
   if (!checkCodeToNullable.value) {
     emits("chooseCode", code.value);
     socket.emit("sender-join", {
-      uid: code.value,
+      id: code.value,
     });
   }
 };
@@ -34,7 +32,7 @@ const chooseCode = () => {
     <h2 class="generation__header-title">Generate code</h2>
   </header>
   <div class="generation__content">
-    <h2 class="generation__content-code" @click="copyCode">{{ code }}</h2>
+    <h3 class="generation__content-code" @click="copyCode">{{ code }}</h3>
     <button class="btn generation__content-btn" @click="createCode">
       Generate code
     </button>
@@ -96,4 +94,20 @@ const chooseCode = () => {
       align-items: center
       gap: 0 10px
       color: $five
+
+@media (max-width: 480px)
+  .generation
+    &__header,
+    &__content
+      padding: 0 15px
+    &__content
+      margin: 15px 0 20px
+      &-code
+        margin: 0 0 10px
+    &__footer
+      padding: 10px 10px 20px
+      gap: 0 15px
+      &-link
+        gap: 0 5px
+        font-size: 14px
 </style>

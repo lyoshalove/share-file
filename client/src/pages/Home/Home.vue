@@ -13,12 +13,12 @@
           </p>
           <span class="hero__span">Get started 👇</span>
           <div class="hero__btns">
-            <RouterLink to="/connection" class="hero__btn btn btn-secondary"
-              >Receiver</RouterLink
-            >
-            <RouterLink to="/share-files" class="hero__btn btn"
-              >Sender</RouterLink
-            >
+            <RouterLink to="/connection" class="hero__btn btn btn-secondary">
+              Connect
+            </RouterLink>
+            <RouterLink to="/share-files" class="hero__btn btn">
+              Create
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -40,4 +40,13 @@
     align-items: center
     gap: 0 20px
     margin: 10px 0 0
+
+@media (max-width: 480px)
+  .hero
+    padding: 30px 0
+    &__description
+      margin: 10px 0 15px
+    &__btns
+      gap: 0 10px
+      margin: 5px 0 0
 </style>

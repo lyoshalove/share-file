@@ -1,8 +1,6 @@
 import {
   ConnectedSocket,
   MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -10,7 +8,7 @@ import {
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway(5000, { cors: true })
-export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class AppGateway {
   @WebSocketServer()
   server: Server;
   rooms: Array<{ senderId: string; roomId: string }>;
@@ -19,33 +17,24 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.rooms = [];
   }
 
-  @SubscribeMessage('check')
-  handleEvent(@MessageBody() data: string) {
-    this.server.emit('snus');
-    console.log(`Да ты охуел, вот тебе данные: ${data}`);
-  }
-
   @SubscribeMessage('sender-join')
   handleSenderJoin(@MessageBody() data, @ConnectedSocket() client: Socket) {
-    console.log('sender-join');
     this.rooms.push({
       senderId: client.id,
-      roomId: data.uid,
+      roomId: data.id,
     });
-    client.join(data.uid);
+    client.join(data.id);
   }
 
   @SubscribeMessage('client-leave')
   handleDisconnectClient(@ConnectedSocket() client: Socket) {
-    console.log('client-leave: ', client.id);
     this.rooms = this.rooms.filter((room) => room.senderId !== client.id);
   }
 
   @SubscribeMessage('receiver-join')
   handleReceiverJoin(@MessageBody() data, @ConnectedSocket() client: Socket) {
-    if (this.rooms.some((room) => room.roomId === data.uid)) {
-      console.log('receiver-join');
-      client.join(data.uid);
+    if (this.rooms.some((room) => room.roomId === data.id)) {
+      client.join(data.id);
       this.connectedToRoom(client);
     } else {
       this.roomNotExist(client);
@@ -54,7 +43,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('send-file')
   handleSendFile(@MessageBody() data, @ConnectedSocket() client: Socket) {
-    client.in(data.uid).emit('file', {
+    client.in(data.id).emit('file', {
       data: data.data,
       fileName: data.fileName,
     });
@@ -66,13 +55,5 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   roomNotExist(client: Socket) {
     client.emit('room-not-exist');
-  }
-
-  handleConnection(client: Socket) {
-    console.log(`client connected: ${client.id}`);
-  }
-
-  handleDisconnect(client: Socket) {
-    console.log(`client disconnected: ${client.id}`);
   }
 }

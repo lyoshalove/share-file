@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ConnectRoom from "@/components/ConnectRoom.vue";
 import ShareForm from "@/components/ShareForm.vue";
-import { ref } from "vue";
+import { socket } from "@/helpers";
+import { onUnmounted, ref } from "vue";
 
 const code = ref<string>("");
 const isConnected = ref<boolean>(false);
@@ -10,6 +11,10 @@ const handleConnected = (newCode: string) => {
   isConnected.value = true;
   code.value = newCode;
 };
+
+onUnmounted(() => {
+  socket.removeAllListeners();
+});
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const handleConnected = (newCode: string) => {
           v-if="!isConnected"
           @connected="(newCode) => handleConnected(newCode)"
         />
-        <ShareForm :code="code" v-else />
+        <ShareForm v-else :roomCode="code" />
       </div>
     </div>
   </section>
@@ -30,10 +35,15 @@ const handleConnected = (newCode: string) => {
 @import @assets/styles/vars
 
 .connection
-  margin: 20px 0
+  padding: 20px 0
   &__inner
     padding: 30px 0 0
     background-color: $four
     border-radius: 10px
     border: 2px solid $secondary
+
+@media (max-width: 480px)
+  .connection
+    &__inner
+      padding: 15px 0 0
 </style>
