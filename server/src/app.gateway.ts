@@ -7,7 +7,17 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway(5000)
+@WebSocketGateway(5000, {
+  cors: {
+    origin: [
+      'http://localhost:5173',
+      'https://share-file-plum.vercel.app',
+      'https://share-file-lyoshalove.vercel.app',
+      'https://share-file-git-main-lyoshalove.vercel.app',
+    ],
+    credentials: true,
+  },
+})
 export class AppGateway {
   @WebSocketServer()
   server: Server;
