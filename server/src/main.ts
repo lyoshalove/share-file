@@ -5,13 +5,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: [
-      'http://localhost:5173/',
-      'https://share-file-plum.vercel.app/',
-      'https://share-file-lyoshalove.vercel.app/',
-      'https://share-file-git-main-lyoshalove.vercel.app/',
-    ],
+    origin: '*',
     credentials: true,
+    methods: ['GET', 'POST'],
   });
 
   await app.listen(3000);
