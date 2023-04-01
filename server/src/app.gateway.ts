@@ -9,12 +9,8 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway(5000, {
   cors: {
-    origin: [
-      'http://localhost:5173',
-      'https://share-file-plum.vercel.app',
-      'https://share-file-lyoshalove.vercel.app',
-      'https://share-file-git-main-lyoshalove.vercel.app',
-    ],
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   },
 })
