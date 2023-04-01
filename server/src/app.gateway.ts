@@ -7,13 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway(5000, {
-  cors: {
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true,
-  },
-})
+@WebSocketGateway(5000, { cors: true })
 export class AppGateway {
   @WebSocketServer()
   server: Server;
