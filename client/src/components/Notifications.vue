@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { notificationsStore } from "@/store";
 import { storeToRefs } from "pinia";
+import { Teleport } from "vue";
 
 const { notifications } = storeToRefs(notificationsStore());
 </script>
 
 <template>
-  <TransitionGroup name="notifications" tag="ul" class="notifications">
+  <Teleport to="body">
+    <TransitionGroup name="notifications" tag="ul" class="notifications">
     <li
       class="notifications__item"
       v-for="notification in notifications"
@@ -15,6 +17,7 @@ const { notifications } = storeToRefs(notificationsStore());
       {{ notification.text }}
     </li>
   </TransitionGroup>
+  </Teleport>
 </template>
 
 <style lang="sass">
