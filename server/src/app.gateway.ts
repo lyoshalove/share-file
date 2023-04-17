@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway(5000, { cors: true })
+@WebSocketGateway(80, { cors: true, transports: ['websocket', 'polling'] })
 export class AppGateway {
   @WebSocketServer()
   server: Server;
