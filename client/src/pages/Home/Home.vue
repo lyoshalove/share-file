@@ -7,9 +7,7 @@
         <div class="hero__offer">
           <h1 class="hero__title">Share files with FILE'ИК</h1>
           <p class="hero__description">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eum sequi,
-            cumque animi laudantium aut ea quasi necessitatibus perspiciatis
-            nisi atque.
+            FILE'ИК this is system to share small size files on websocket protocol.
           </p>
           <span class="hero__span">Get started 👇</span>
           <div class="hero__btns">
